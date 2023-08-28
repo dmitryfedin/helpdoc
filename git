@@ -1,0 +1,195 @@
+envirment
+    system # system
+    global # user
+    local # repo
+
+config # /home/username/.gitconfig
+    git config --global user.name Dima
+    git config --global user.email la@mai.ru
+    git config --global core.editor nano
+
+.gitignore # file in repo
+    # ignore files in repo
+    *.js
+    public/*
+    secrets/*
+
+init
+    # init repo
+    git init
+    # create remote branch
+    git remote add origin git@gitlab...
+
+add
+    # git add all in .
+    git add .
+    # interactive mode with -p, where need accept all 
+    git add . -p
+
+commit
+    # write content without help
+    git commit -m "Content"
+    # write content with redactor and help
+    git commit
+    # previous, only local
+    git commit --amend
+
+branch
+    # check branch
+    git branch
+    # create branch
+    git branc newBranch
+    # change branch
+    git checkout newBranch
+
+log
+    # check commits
+    git log
+
+push
+    # push
+    git push 
+    # push to branch
+    git push -u origin master
+    # перезаписывает
+    git push --force
+
+pull
+    # take from remote all branches origin
+    git pull
+    # from another repo
+    git pull gitlab_repo
+    # conflicts in repo
+    git pull --rebase
+
+pull_reqest
+    ?
+
+
+merge
+    # merge branch_2 into branch_main
+    git merge branch_2
+
+status
+    # все конфликты
+    git status
+
+show
+    git show HEAD
+
+_remote_http
+    git remote add origin https://github.com/dmitryfedin/docker-test.git
+    git branch -M main
+    git push -u origin main
+
+_remote_change_url
+    git remote set-url origin git@github.com:dmitryfedin/docker-test.git
+
+# изменяет предидущий коммит с точностью наоборот
+_revert
+    ### git revert (revert last commit)
+    git show HEAD
+    git log 
+    # git rever HEAD
+    git revert $hash
+
+# тоже самое только не revert
+_change_previous_commit
+    ### changes in previous commit on local
+    nano 5.tx
+    git add . -p
+    git commit --amend
+    git show HEAD
+
+_delete_3_commits
+    ### delete previous 3 commits
+    git log 
+    # need hash of commit
+    git reset $hash
+    git status
+    #!!! reset any files and changes
+    #!!! git checkout .
+    # to push
+    git push --force
+
+_solve_conflict_with_pull
+    ### conflicts with pull --rebase
+    git pull -rebase
+    git status
+    nano 5.txt
+    git add 5.txt
+    git rebase --continue
+    git status
+    nano 4.txt
+    git add 4.txt
+    git rebase --continue
+
+_krasota :)
+    ### name of branch in promt
+    # ~/.bashrc
+    # 1 example
+    # https://user-images.githubusercontent.com/30690670/108948594-5bf63980-7695-11eb-9981-9c4fc332e953.png
+    function parse_git_dirty {
+    [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working tree clean" ]] && echo "*"
+    }
+    function parse_git_branch {
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/(\1$(parse_git_dirty))/"
+    }
+    export PS1='\[\e[\033[01;34m\]\u@\h \[\e[38;5;211m\]\W\[\e[\033[38;5;48m\] $(parse_git_branch)\[\e[\033[00m\]\$ '
+
+    # 2 example
+    # https://user-images.githubusercontent.com/3128048/111437981-5fb53300-870c-11eb-94ea-83f83587546f.png
+    FMT_BOLD="\e[1m"
+    FMT_RESET="\e[0m"
+    FMT_UNBOLD="\e[21m"
+    FG_BLACK="\e[30m"
+    FG_BLUE="\e[34m"
+    FG_CYAN="\e[36m"
+    FG_GREEN="\e[32m"
+    FG_MAGENTA="\e[35m"
+    FG_RED="\e[31m"
+    FG_WHITE="\e[97m"
+    BG_BLUE="\e[44m"
+    BG_GREEN="\e[42m"
+    BG_MAGENTA="\e[45m"
+
+    export GIT_PS1_SHOWDIRTYSTATE=1
+    export GIT_PS1_SHOWCOLORHINTS=1
+
+    export PS1=\
+    "\n\[${BG_GREEN}\] \[${FG_RED}\] \[${FG_BLACK}\]\u \[${FG_GREEN}${BG_BLUE}\] "\
+    "\[${FG_BLACK}\]\w \[${FMT_RESET}${FG_BLUE}\]"\
+    '$(__git_ps1 "\[${BG_MAGENTA}\] \[${FG_WHITE}\] %s \[${FMT_RESET}${FG_MAGENTA}\]")'\
+    "\n \[${FG_GREEN}\]╰ \[${FG_CYAN}\]\$ \[${FMT_RESET}\]"
+
+
+GIT_FLOW
+    apt install git-flow
+    git flow init
+    # enter
+    # enter
+    # enter ...
+    ...
+    feature
+        # start from develop
+        git flow feature start newFeature
+        git log
+        ...
+        # merge into develop
+        git flow feature finish newFeature
+
+    hotfix
+        # start from master
+        git flow hotfix start newHotfix
+        git log
+        ...
+        # merge into master and develop
+        git flow hotfix finsi newHotfix
+
+    release
+        git flow release start 0.0.1
+        ...
+        # merge into master and develop
+        git flow release finish 0.0.1
+
+
